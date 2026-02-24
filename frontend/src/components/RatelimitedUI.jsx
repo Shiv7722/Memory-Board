@@ -34,4 +34,4 @@ const RateLimitedUI = () => {
   );
 };
 
-export default RateLimitUI;
+export default RateLimitedUI;

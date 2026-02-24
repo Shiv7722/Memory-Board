@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router";
 import { Edit, Trash2 } from "lucide-react";
 import { formatDate } from "../lib/utils";
-import axios from "axios";
+import axiosInstance from "../lib/axios";
 import toast from "react-hot-toast";
 
 const NoteCard = ({ note, setNotes }) => {
@@ -10,15 +10,15 @@ const NoteCard = ({ note, setNotes }) => {
     e.preventDefault();
     if (!window.confirm("Are you sure! You want to delete this note")) return;
     try {
-      const res = await axios.delete(`http://localhost:5001/api/notes/${id}`);
-      if (res.status === 200) {
+      const res = await axiosInstance.delete(`/notes/${id}`);
+      if (res?.status === 200) {
         setNotes((prev) => prev.filter((note) => note._id !== id));
         toast.success("Note deleted successfully");
       }
     } catch (error) {
       // console.log("Error in delete handler", error);
-      if(error.status===429){
-        toast.error("Too many request please try after sometime")
+      if (error?.status === 429) {
+        toast.error("Too many request please try after sometime");
       }
     }
   };
