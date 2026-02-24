@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 
 import notesRoutes from "./routes/notesRoutes.js";
 import { createDB } from "./config/db.js";
+import rateLimiter from "./middleware/rateLimiter.js";
 
 
 
@@ -21,4 +22,5 @@ createDB().then(()=>{
 
 //middleware
 app.use(express.json());
+app.use(rateLimiter);
 app.use("/api/notes", notesRoutes);
