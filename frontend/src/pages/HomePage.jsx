@@ -13,10 +13,10 @@ const HomePage = () => {
     (async () => {
       try {
         const res = await axios.get("http://localhost:5001/api/notes");
-        console.log(res.data);
+        // console.log(res.data);
         if (res?.status === 200) {
           toast.success("Notes fetched successfully");
-          console.log(res.data);
+          // console.log(res.data);
           setNotes(res.data);
           setIsLoading(false);
         }
@@ -42,7 +42,7 @@ const HomePage = () => {
       {!isLoading && !isRateLimited && notes?.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
           {notes.map((note) => {
-            return <NoteCard key={note._id} note={note} />;
+            return <NoteCard key={note._id} note={note} setNotes={setNotes} />;
           })}
         </div>
       )}

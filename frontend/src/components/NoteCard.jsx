@@ -1,10 +1,27 @@
-import React from 'react'
-import {Link} from 'react-router'
-import { Edit, Trash2 } from 'lucide-react'
-import { formatDate } from '../lib/utils';
+import React from "react";
+import { Link } from "react-router";
+import { Edit, Trash2 } from "lucide-react";
+import { formatDate } from "../lib/utils";
+import axios from "axios";
+import toast from "react-hot-toast";
 
-const NoteCard = ({note}) => {
-
+const NoteCard = ({ note, setNotes }) => {
+  const handleDelete = async (e, id) => {
+    e.preventDefault();
+    if (!window.confirm("Are you sure! You want to delete this note")) return;
+    try {
+      const res = await axios.delete(`http://localhost:5001/api/notes/${id}`);
+      if (res.status === 200) {
+        setNotes((prev) => prev.filter((note) => note._id !== id));
+        toast.success("Note deleted successfully");
+      }
+    } catch (error) {
+      // console.log("Error in delete handler", error);
+      if(error.status===429){
+        toast.error("Too many request please try after sometime")
+      }
+    }
+  };
 
   return (
     <Link
@@ -22,9 +39,12 @@ const NoteCard = ({note}) => {
           </span>
           <div className="flex items-center gap-1">
             <button className="btn btn-ghost btn-xs">
-              <Edit className="size-5 p-0.5 text-base-content/70"/>
+              <Edit className="size-5 p-0.5 text-base-content/70" />
             </button>
-            <button className="btn btn-ghost btn-xs" onClick={(e)=>handleDelete(e,note._id)}>
+            <button
+              className="btn btn-ghost btn-xs"
+              onClick={(e) => handleDelete(e, note._id)}
+            >
               <Trash2 className="size-4 text-error"></Trash2>
             </button>
           </div>
@@ -32,6 +52,6 @@ const NoteCard = ({note}) => {
       </div>
     </Link>
   );
-}
+};
 
-export default NoteCard
+export default NoteCard;
