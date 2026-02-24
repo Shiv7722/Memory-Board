@@ -1,11 +1,11 @@
 import express from "express";
-import dotenv from "dotenv";
+// import dotenv from "dotenv";
 
 import notesRoutes from "./routes/notesRoutes.js";
 import { createDB } from "./config/db.js";
 import rateLimiter from "./middleware/rateLimiter.js";
 
-dotenv.config();
+// dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5001;
