@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { useEffect, useState } from "react";
+import axiosInstance from "../lib/axios";
 import toast from "react-hot-toast";
 import Navbar from "../components/Navbar";
 import NoteCard from "../components/NoteCard";
@@ -14,7 +14,7 @@ const HomePage = () => {
   useEffect(() => {
     (async () => {
       try {
-        const res = await axios.get("http://localhost:5001/api/notes");
+        const res = await axiosInstance.get("/notes");
         // console.log(res.data);
         if (res?.status === 200) {
           setNotes(res.data);
@@ -22,10 +22,11 @@ const HomePage = () => {
         }
       } catch (error) {
         console.log("Error in fetching data", error);
-        toast.error("Notes fetched successfully");
         if (error?.status === 429) {
           setIsRateLimited(true);
         }
+      }finally{
+        setIsLoading(false);
       }
     })();
   }, []);
