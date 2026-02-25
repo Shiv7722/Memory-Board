@@ -1,14 +1,34 @@
 import express from "express";
-// import dotenv from "dotenv";
+import path from "path";
+import cors from "cors";
 
 import notesRoutes from "./routes/notesRoutes.js";
 import { createDB } from "./config/db.js";
 import rateLimiter from "./middleware/rateLimiter.js";
 
-// dotenv.config();
-
 const app = express();
 const PORT = process.env.PORT || 5001;
+const __dirname = path.resolve();
+
+console.log("current backend dir name",__dirname);
+
+//middleware
+if(process.env.NODE_ENV !== "production") app.use(cors({ origin: ["http://localhost:5173", "http://localhost:5174"] }));
+app.use(express.json());
+app.use(rateLimiter);
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../frontend/dist")));
+}
+
+app.use("/api/notes", notesRoutes);
+
+if (process.env.NODE_ENV === "production") {
+  console.log("path to frontend",path.join(__dirname, "../frontend", "dist", "index.html"))
+  app.use((req, res) => {
+    res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
+  });
+}
 
 //creating connection with MongoDB and then starting the app
 createDB().then(() => {
@@ -16,8 +36,3 @@ createDB().then(() => {
     console.log("Server started successfully on PORT", PORT);
   });
 });
-
-//middleware
-app.use(express.json());
-app.use(rateLimiter);
-app.use("/api/notes", notesRoutes);
