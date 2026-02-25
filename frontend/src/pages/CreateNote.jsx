@@ -21,8 +21,8 @@ const CreateNote = () => {
       return;
     }
     
-    if (title.length > 100) {
-        toast.error("Title is too long. Maximum 100 characters allowed.");
+    if (title.length > 26) {
+        toast.error("Title is too long. Maximum 25 characters allowed.");
         setIsLoading(false);
         return;
     }

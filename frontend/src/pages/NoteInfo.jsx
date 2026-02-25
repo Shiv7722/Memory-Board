@@ -62,9 +62,9 @@ const NoteInfo = () => {
       return;
     }
 
-    if (title.length > 100) {
-      toast.error("Title is too long. Maximum 100 characters allowed.");
-      setIsLoading(false);
+    if (title.length > 26) {
+      toast.error("Title is too long. Maximum 25 characters allowed.");
+      setIsSaving(false);
       return;
     }
 
@@ -157,6 +157,7 @@ const NoteInfo = () => {
                     <button
                       type="submit"
                       className="btn btn-primary justify-end"
+                      disabled={isSaving || isRateLimited || isLoading}
                     >
                       {isSaving ? "Saving...." : "Save Changes"}
                     </button>
