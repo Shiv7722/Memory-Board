@@ -1,0 +1,22 @@
+{
+  "name": "merndeployment",
+  "version": "1.0.0",
+  "description": "A full-stack MERN application for creating, managing, and organizing notes. Built with MongoDB, Express.js, React, and Node.js.",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm install --prefix frontend && npm install --prefix backend && npm run build --prefix frontend",
+    "start": "npm run start --prefix backend"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shiv7722/Memory-Board.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/Shiv7722/Memory-Board/issues"
+  },
+  "homepage": "https://github.com/Shiv7722/Memory-Board#readme"
+}
