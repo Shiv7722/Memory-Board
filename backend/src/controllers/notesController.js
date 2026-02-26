@@ -1,8 +1,8 @@
 import Note from "../models/Note.js";
 
-export async function getAllNotes(_, res) {
+export async function getAllNotes(req, res) {
   try {
-    const notes = await Note.find().sort({ createdAt: -1 });
+    const notes = await Note.find({ userId: req.userId }).sort({ createdAt: -1 });
     return res.status(200).send(notes);
   } catch (error) {
     console.error("Error in getNotes controller", error);
@@ -12,7 +12,7 @@ export async function getAllNotes(_, res) {
 
 export async function getNotesById(req, res) {
   try {
-    const noteFound = await Note.findById(req.params.id);
+    const noteFound = await Note.findOne({ _id: req.params.id, userId: req.userId });
     if (!noteFound) return res.status(404).json({ message: "Note not found" });
     console.log("resultant of findById",noteFound);
     return res.status(200).json(noteFound);
@@ -25,7 +25,7 @@ export async function getNotesById(req, res) {
 export async function createNote(req, res) {
   try {
     const { title, content } = req.body;
-    const note = new Note({ title, content });
+    const note = new Note({ title, content, userId: req.userId });
     const savedNote = await note.save();
     return res.status(201).json(savedNote);
   } catch (error) {
@@ -37,8 +37,8 @@ export async function createNote(req, res) {
 export async function updateNote(req, res) {
   try {
     const { title, content } = req.body;
-    const updatedNote = await Note.findByIdAndUpdate(
-      req.params.id,
+    const updatedNote = await Note.findOneAndUpdate(
+      { _id: req.params.id, userId: req.userId },
       { title, content },
       { new: true },
     );
@@ -54,7 +54,7 @@ export async function updateNote(req, res) {
 
 export async function removeNote(req, res) {
   try {
-    const deletedNote = await Note.findByIdAndDelete(req.params.id);
+    const deletedNote = await Note.findOneAndDelete({ _id: req.params.id, userId: req.userId });
     console.log("result of findByIdAndDelete",deletedNote);
     if(!deletedNote) {
       return res.status(404).json({ message: "Requested Note not found" });
